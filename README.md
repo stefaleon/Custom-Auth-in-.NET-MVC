@@ -253,3 +253,42 @@ using CustomAuthMVC.ViewModels;
 </body>
 </html>
 ```
+
+
+
+&nbsp;
+## 05 Custom Principal
+
+* Add the *Security* folder.
+
+* Add the *CustomPrincipal* class which inherits from *IPrincipal*. The custom principal constructor takes an account parameter and defines a generic identity for the user name of the account. The roles attached to this account are defined in the implementation of the *IsInRole* method, which is required by the *IPrincipal* interface.
+
+*Security/CustomPrincipal.cs*
+```
+using SecurityWithASPNETMVC.Models;
+using System.Linq;
+using System.Security.Principal;
+
+
+namespace SecurityWithASPNETMVC.Security
+{
+    public class CustomPrincipal : IPrincipal
+    {
+        private Account Account;        
+
+        public CustomPrincipal(Account account)
+        {
+            Account = account;
+            Identity = new GenericIdentity(account.UserName);        
+        }
+
+        public IIdentity Identity { get; set; }        
+
+        public bool IsInRole(string role)
+        {
+            var roles = role.Split(new char[] { ',' });
+            return roles.Any(r => Account.Roles.Contains(r));
+        }
+    }
+}
+```
