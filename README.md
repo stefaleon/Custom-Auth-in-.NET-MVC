@@ -54,3 +54,78 @@ namespace CustomAuthMVC.Controllers
 </body>
 </html>
 ```
+
+
+
+&nbsp;
+## 02 Models
+
+* Add the *Account* class.
+
+*Models/Account.cs*
+```
+using System.ComponentModel.DataAnnotations;
+
+namespace CustomAuthMVC.Models
+{
+    public class Account
+    {
+        [Display(Name = "Username")]
+        public string UserName { get; set; }
+
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        public string[] Roles { get; set; }
+    }
+}
+```
+
+
+* Add the *AccountModel* class. Define three demo accounts in the constructor and the *find* and *login* methods that return *Account* objects.
+
+*Models/AccountModel.cs*
+```
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CustomAuthMVC.Models
+{
+    public class AccountModel
+    {
+        private List<Account> listAccounts = new List<Account>();
+
+        public AccountModel()
+        {
+            listAccounts.Add(new Account
+            {
+                UserName = "acc1",
+                Password = "123",
+                Roles = new string[] { "superadmin", "admin", "employee" }
+            });
+            listAccounts.Add(new Account
+            {
+                UserName = "acc2",
+                Password = "123",
+                Roles = new string[] { "admin", "employee" }
+            });
+            listAccounts.Add(new Account
+            {
+                UserName = "acc3",
+                Password = "123",
+                Roles = new string[] { "employee" }
+            });
+        }
+
+        public Account find(string username)
+        {
+            return listAccounts.Where(acc => acc.UserName.Equals(username)).FirstOrDefault(); ;
+        }
+
+        public Account login(string username, string password)
+        {
+            return listAccounts.Where(acc => acc.UserName.Equals(username) && acc.Password.Equals(password)).FirstOrDefault();
+        }
+    }
+}
+```
