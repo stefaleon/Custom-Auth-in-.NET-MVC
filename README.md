@@ -194,3 +194,62 @@ namespace CustomAuthMVC.ViewModels
 </body>
 </html>
 ```
+
+
+&nbsp;
+## 04 Login method with Forms Authentication
+
+* In the project's *Web.config*, inside *<configuration>/<system.web>*, add the *<authentication>* tag, directing to the *Account* index view for the login url.
+
+```
+    <authentication mode="Forms">
+      <forms loginUrl="~/Account/Index">
+      </forms>
+    </authentication>
+```
+
+* Add the *Login* method in the *Account* controller.
+
+```
+using CustomAuthMVC.Models;
+using CustomAuthMVC.ViewModels;
+```
+```
+        [HttpPost]
+        public ActionResult Login(AccountViewModel avm)
+        {
+            AccountModel am = new AccountModel();
+            if (string.IsNullOrEmpty(avm.Account.UserName) ||
+                string.IsNullOrEmpty(avm.Account.Password) ||
+                am.login(avm.Account.UserName, avm.Account.Password) == null)
+            {
+                ViewBag.Error = "Login failed.";
+                return View("Index");
+            }            
+            return View("Success");
+        }
+```
+
+
+* Add the *Success* view.
+
+*Views/Account/Success.cshtml*
+```
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Success</title>
+</head>
+<body>
+    <div>
+        The login was successful.
+    </div>
+</body>
+</html>
+```
