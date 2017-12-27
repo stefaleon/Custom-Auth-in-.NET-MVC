@@ -9,26 +9,20 @@ namespace CustomAuthMVC.Models
     {
         private List<Account> listAccounts = new List<Account>();
 
+        private CustomAuthMVCEntities db = new CustomAuthMVCEntities();
+
         public AccountModel()
         {
-            listAccounts.Add(new Account
+
+            foreach (var user in db.Users)
             {
-                UserName = "acc1",
-                Password = "123",
-                Roles = new string[] { "superadmin" }
+                listAccounts.Add(new Account
+                {
+                    UserName = user.UserName,
+                    Password = user.Password,
+                    Roles = user.Roles.Split(new char[] { ',' })
             });
-            listAccounts.Add(new Account
-            {
-                UserName = "acc2",
-                Password = "123",
-                Roles = new string[] { "admin" }
-            });
-            listAccounts.Add(new Account
-            {
-                UserName = "acc3",
-                Password = "123",
-                Roles = new string[] { "employee" }
-            });
+            }
         }
 
         public Account find(string username)

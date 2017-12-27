@@ -592,3 +592,68 @@ namespace CustomAuthMVC.Controllers
 </body>
 </html>
 ```
+
+
+&nbsp;
+## 09 Get users from a database
+
+* Create the CustomAuthMVC database.
+
+* Create the *Users* table.
+
+```
+Create Table Users
+(
+Id int Identity,
+UserName nvarchar(20),
+Password nvarchar(20),
+Roles nvarchar(50)
+)
+```
+
+* Insert sample users.
+
+```
+Insert into Users values('sa','123', 'superadmin')
+Insert into Users values('admin','123', 'admin')
+Insert into Users values('emp','123', 'employee')
+Insert into Users values('test','123', 'superadmin,admin,employee')
+```
+
+
+* Add the Entity database first UserModel
+  * Right click on project, add New Item.
+  * Data, ADO.NET Entity Data Model -> Name: UserModel.
+  * EF Designer from database.
+  * New Connection -> (localdb)\MSSQLLOCALDB, database: CustomAuthMVC  
+  * Save connection settings in Web.Config as: CustomAuthMVCEntities
+  * Select all tables (only the Users table is available anyway)
+  * Pluralize or singularize generated object names
+  * Include foreign key columns in he model.
+  * Model Namespace: CustomAuthMVCModel
+
+
+
+* Now in *AccountModel* we can load the users from the database in the constructor implementation.
+
+*Models/AccountModel*
+```
+  //...
+
+  private CustomAuthMVCEntities db = new CustomAuthMVCEntities();
+
+        public AccountModel()
+        {
+
+            foreach (var user in db.Users)
+            {
+                listAccounts.Add(new Account
+                {
+                    UserName = user.UserName,
+                    Password = user.Password,
+                    Roles = user.Roles.Split(new char[] { ',' })
+            });
+            }
+        }
+
+```
