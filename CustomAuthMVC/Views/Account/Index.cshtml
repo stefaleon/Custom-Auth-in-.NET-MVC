@@ -1,17 +1,33 @@
-﻿
+﻿@model CustomAuthMVC.ViewModels.AccountViewModel
+
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>AccountIndex</title>
 </head>
 <body>
-    <div> 
-    </div>
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @ViewBag.Error
+        <table cellpadding="2" cellspacing="2">
+            <tr>
+                <td>@Html.LabelFor(model => model.Account.UserName)</td>
+                <td>@Html.TextBoxFor(model => model.Account.UserName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Account.Password)</td>
+                <td>@Html.PasswordFor(model => model.Account.Password)</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><input type="submit" value="Login"></td>
+            </tr>
+        </table>
+    }
 </body>
 </html>

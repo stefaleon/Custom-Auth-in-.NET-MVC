@@ -129,3 +129,68 @@ namespace CustomAuthMVC.Models
     }
 }
 ```
+
+
+&nbsp;
+## 03 Display the Account Index View in the default route
+
+* In *App_Start/RouteConfig.cs* set the default route controller to the *AccountController*.
+
+```
+defaults: new { controller = "Account", action = "Index", id = UrlParameter.Optional }
+```
+
+
+* Add the *ViewModels* folder and the *AccountViewModel* class.
+
+*ViewModels/AccountViewModel.cs*
+```
+using CustomAuthMVC.Models;
+
+namespace CustomAuthMVC.ViewModels
+{
+    public class AccountViewModel
+    {
+        public Account Account { get; set; }
+    }
+}
+```
+
+* Edit the *Account* index view in order to receive the *AccountViewModel* and display a login form.
+
+*Views/Account/Index.cshtml*
+```
+@model CustomAuthMVC.ViewModels.AccountViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AccountIndex</title>
+</head>
+<body>
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+    {
+        @ViewBag.Error
+        <table cellpadding="2" cellspacing="2">
+            <tr>
+                <td>@Html.LabelFor(model => model.Account.UserName)</td>
+                <td>@Html.TextBoxFor(model => model.Account.UserName)</td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.Account.Password)</td>
+                <td>@Html.PasswordFor(model => model.Account.Password)</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td><input type="submit" value="Login"></td>
+            </tr>
+        </table>
+    }
+</body>
+</html>
+```
