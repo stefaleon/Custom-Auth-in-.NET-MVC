@@ -344,3 +344,84 @@ namespace CustomAuthMVC.Security
     }
 }
 ```
+
+
+
+&nbsp;
+## 07 Custom Authorize Attribute
+
+* In the *Security* folder, add the *CustomAuthorizeAttribute* class which inherits from *AuthorizeAttribute*. Depending on the authorization status, the user is directed to the appropriate route.
+
+*Security/CustomAuthorizeAttribute.cs*
+```
+using CustomAuthMVC.Models;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace CustomAuthMVC.Security
+{
+    public class CustomAuthorizeAttribute : AuthorizeAttribute
+    {
+        public override void OnAuthorization(AuthorizationContext filterContext)
+        {
+            if (string.IsNullOrEmpty(SessionPersister.Username))
+                filterContext.Result = new RedirectToRouteResult(new
+                    RouteValueDictionary(new {
+                        controller = "Account",
+                        action = "Index"
+                    }));
+            else
+            {
+                AccountModel am = new AccountModel();
+                CustomPrincipal mp = new CustomPrincipal(am.find(SessionPersister.Username));
+                if (!mp.IsInRole(Roles))
+                    filterContext.Result = new RedirectToRouteResult(new
+                        RouteValueDictionary(new {
+                            controller = "AccessDenied",
+                            action = "Index"
+                        }));
+            }
+        }
+    }
+}
+```
+
+* In the *Security* folder, add the *AccessDenied* controller and the relevant *Index* view in *Views* folder.
+
+*Security/AccessDeniedController.cs*
+```
+using System.Web.Mvc;
+
+namespace CustomAuthMVC.Security
+{
+    public class AccessDeniedController : Controller
+    {
+        // GET: AccessDenied
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
+}
+```
+
+*Views/AccessDenied/Index.cshtml*
+```
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AcccessDeniedIndex</title>
+</head>
+<body>
+    <div>
+        Access Denied.
+    </div>
+</body>
+</html>
+```
