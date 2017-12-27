@@ -8,3 +8,49 @@
 
 * New ASP.NET Web Application.
 * MVC, No Authentication
+
+
+
+&nbsp;
+## 01 Account controller and view
+
+* Remove the auto generated controllers, models and views.
+
+* Add the empty MVC5 *AccountController* and the *Account/Index* in the related view.
+
+*Controllers/AccountController.cs*
+```
+using System.Web.Mvc;
+
+namespace CustomAuthMVC.Controllers
+{
+    public class AccountController : Controller
+    {
+        // GET: Account
+        public ActionResult Index()
+        {
+            return View();
+        }
+    }
+}
+```
+
+*Views/Account/Index.cshtml*
+```
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div>
+    </div>
+</body>
+</html>
+```
