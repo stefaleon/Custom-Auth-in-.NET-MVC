@@ -1,4 +1,5 @@
 ﻿using CustomAuthMVC.Models;
+using CustomAuthMVC.Security;
 using CustomAuthMVC.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,8 @@ namespace CustomAuthMVC.Controllers
             {
                 ViewBag.Error = "Login failed.";
                 return View("Index");
-            }            
+            }
+            SessionPersister.Username = avm.Account.UserName;
             return View("Success");
         }
 

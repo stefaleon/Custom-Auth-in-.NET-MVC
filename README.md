@@ -292,3 +292,55 @@ namespace SecurityWithASPNETMVC.Security
     }
 }
 ```
+
+
+
+&nbsp;
+## 06 Session Persister
+
+* In the *Security* folder, add the *SessionPersister* **static** class. On successful login, the authenticated username from the form is being assigned to the session persister username, hence username persistence is achieved in the current HttpContext for this session.
+
+*Controllers/AccountController.cs*
+```
+using CustomAuthMVC.Security;
+```
+```
+    [HttpPost]
+    public ActionResult Login(AccountViewModel avm)
+    {
+        // ...
+        SessionPersister.Username = avm.Account.UserName;
+        return View("Success");
+    }
+```
+
+
+*Security/SessionPersister.cs*
+```
+using System.Web;
+
+namespace CustomAuthMVC.Security
+{
+    public static class SessionPersister
+    {
+        static string usernameSessionVar = "username";
+
+        public static string Username
+        {
+            get
+            {
+                if (HttpContext.Current == null)
+                    return string.Empty;
+                var sessionVar = HttpContext.Current.Session[usernameSessionVar];
+                if (sessionVar != null)
+                    return sessionVar as string;
+                return null;
+            }
+            set
+            {
+                HttpContext.Current.Session[usernameSessionVar] = value;
+            }
+        }
+    }
+}
+```
