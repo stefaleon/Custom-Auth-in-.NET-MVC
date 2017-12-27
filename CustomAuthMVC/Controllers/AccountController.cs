@@ -33,5 +33,11 @@ namespace CustomAuthMVC.Controllers
             return View("Success");
         }
 
+        public ActionResult Logout()
+        {
+            SessionPersister.Username = string.Empty;
+            return RedirectToAction("Index");
+        }
+
     }
 }

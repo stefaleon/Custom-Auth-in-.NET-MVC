@@ -15,13 +15,13 @@ namespace CustomAuthMVC.Models
             {
                 UserName = "acc1",
                 Password = "123",
-                Roles = new string[] { "superadmin", "admin", "employee" }
+                Roles = new string[] { "superadmin" }
             });
             listAccounts.Add(new Account
             {
                 UserName = "acc2",
                 Password = "123",
-                Roles = new string[] { "admin", "employee" }
+                Roles = new string[] { "admin" }
             });
             listAccounts.Add(new Account
             {

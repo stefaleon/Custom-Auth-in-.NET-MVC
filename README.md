@@ -425,3 +425,170 @@ namespace CustomAuthMVC.Security
 </body>
 </html>
 ```
+
+
+&nbsp;
+## 08 Demonstration
+
+* Add the Logout method in *AccountController*.
+
+```
+    public ActionResult Logout()
+    {
+        SessionPersister.Username = string.Empty;
+        return RedirectToAction("Index");
+    }
+```
+
+
+
+* Add the demonstration controller.
+  * The demo index view is accessible by anonymous users.
+  * *Work1* view is accessible only by accounts that have the *superadmin* role.
+  * *Work2* view is accessible by accounts that have the *superadmin* or the *admin* role.
+  * *Work3* view is accessible by accounts that have the *superadmin* or the *admin* or the *employee* role.
+
+*Controllers/DemoController.cs*
+```
+using CustomAuthMVC.Security;
+using System.Web.Mvc;
+
+namespace CustomAuthMVC.Controllers
+{
+    public class DemoController : Controller
+    {
+        [AllowAnonymous]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [CustomAuthorize(Roles = "superadmin")]
+        public ActionResult Work1()
+        {
+            return View("Work1");
+        }
+
+        [CustomAuthorize(Roles = "superadmin,admin")]
+        public ActionResult Work2()
+        {
+            return View("Work2");
+        }
+
+        [CustomAuthorize(Roles = "superadmin,admin,employee")]
+        public ActionResult Work3()
+        {
+            return View("Work3");
+        }
+    }
+}
+```
+
+* Because of the way the authorizations in *DemoController* are set, the test users defined in the constructor of the *AccountModel* do not need to be assigned to more than one roles in order to achieve the same functionality.
+
+*Models/AccountModel.cs*
+```
+    public AccountModel()
+    {
+        listAccounts.Add(new Account
+        {
+            UserName = "acc1",
+            Password = "123",
+            Roles = new string[] { "superadmin" }
+        });
+        listAccounts.Add(new Account
+        {
+            UserName = "acc2",
+            Password = "123",
+            Roles = new string[] { "admin" }
+        });
+        listAccounts.Add(new Account
+        {
+            UserName = "acc3",
+            Password = "123",
+            Roles = new string[] { "employee" }
+        });
+    }
+```
+
+
+* Add the demo views.
+
+*Views/Demo/Index.cshtml*
+```
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DemoIndex</title>
+</head>
+<body>
+    <div>
+        <p>Index in demo</p>
+        <p>Anonymous access is allowed.</p>
+    </div>
+</body>
+</html>
+```
+
+*Views/Demo/Work1.cshtml*
+```
+@{
+    Layout = null;
+}
+
+@using SecurityWithASPNETMVC.Security
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Work1</title>
+</head>
+<body>
+    <div>
+        Work 1
+        <br />
+        Welcome @SessionPersister.Username
+        <br />
+        <a href="@Url.Action("Logout", "Account")">Logout</a>
+    </div>
+</body>
+</html>
+```
+
+* Views for *Work2* and *Work3* are copies of the one for *Work1*.
+
+
+* Update the *Success* view.
+
+*Views/Account/Success.cshtml*
+```
+@{
+    Layout = null;
+}
+
+@using CustomAuthMVC.Security
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Success</title>
+</head>
+<body>
+    <div>
+        Welcome @SessionPersister.Username
+        <br />
+        <a href="@Url.Action("Logout", "Account")">Logout</a>
+    </div>
+</body>
+</html>
+```

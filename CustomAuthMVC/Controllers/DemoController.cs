@@ -26,6 +26,7 @@ namespace CustomAuthMVC.Controllers
         {
             return View("Work2");
         }
+
         [CustomAuthorize(Roles = "superadmin,admin,employee")]
         public ActionResult Work3()
         {

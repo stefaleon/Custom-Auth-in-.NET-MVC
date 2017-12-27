@@ -189,10 +189,13 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Success.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
+    <Content Include="Views\Demo\Index.cshtml" />
+    <Content Include="Views\Demo\Work1.cshtml" />
+    <Content Include="Views\Demo\Work2.cshtml" />
+    <Content Include="Views\Demo\Work3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Demo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
